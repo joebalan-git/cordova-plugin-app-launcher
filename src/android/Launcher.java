@@ -415,6 +415,7 @@ public class Launcher extends CordovaPlugin {
 				try {
 					intent.putExtras(extras);
 					mycordova.startActivityForResult(plugin, intent, LAUNCH_REQUEST);
+
 					((Launcher) plugin).callbackLaunched();
 				} catch (ActivityNotFoundException e) {
 					Log.e(TAG, "Error: Activity for " + uri + " was not found.");
@@ -472,9 +473,17 @@ public class Launcher extends CordovaPlugin {
 						json.put("data", intent.getDataString());
 					} catch(JSONException ignored) {}
 				}
-				callback.success(json);
+                try{
+                    callback.success(json);
+                } catch(NullPointerException e){
+                    Log.d(TAG, "Callback is null for success() in onActivityResult()");
+                }
 			} else {
-				callback.error("Activity failed (" + resultCode + ").");
+                try{
+                    callback.error("Activity failed (" + resultCode + ").");
+                } catch(NullPointerException e){
+                    Log.d(TAG, "Callback is null for error() in onActivityResult()");
+                }
 			}
 		}
 	}
@@ -535,4 +544,8 @@ public class Launcher extends CordovaPlugin {
 		}
 		return null;
 	}
+    
+    public void onRestoreStateForActivityResult(Bundle state, CallbackContext callbackContext) {
+        this.callback = callbackContext;
+    }
 }
