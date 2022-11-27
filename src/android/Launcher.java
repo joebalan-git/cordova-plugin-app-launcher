@@ -473,17 +473,9 @@ public class Launcher extends CordovaPlugin {
 						json.put("data", intent.getDataString());
 					} catch(JSONException ignored) {}
 				}
-                try{
-                    callback.success(json);
-                } catch(NullPointerException e){
-                    Log.d(TAG, "Callback is null for success() in onActivityResult()");
-                }
+				callback.success(json);
 			} else {
-                try{
-                    callback.error("Activity failed (" + resultCode + ").");
-                } catch(NullPointerException e){
-                    Log.d(TAG, "Callback is null for error() in onActivityResult()");
-                }
+				callback.error("Activity failed (" + resultCode + ").");
 			}
 		}
 	}
@@ -544,8 +536,8 @@ public class Launcher extends CordovaPlugin {
 		}
 		return null;
 	}
-    
-    public void onRestoreStateForActivityResult(Bundle state, CallbackContext callbackContext) {
-        this.callback = callbackContext;
-    }
+
+	public void onRestoreStateForActivityResult(Bundle state, CallbackContext callbackContext) {
+		this.callback = callbackContext;
+	}
 }
